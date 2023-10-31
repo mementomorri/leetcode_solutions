@@ -38,20 +38,26 @@ Constraints:
 
 
 class MyHashSet:
-
     def __init__(self):
-        self.hash_set = list()
+        self.size = 1000
+        self.buckets = [[] for _ in range(self.size)]
 
     def add(self, key: int) -> None:
-        if key not in self.hash_set:
-            self.hash_set.append(key)
+        index = self._hash(key)
+        if key not in self.buckets[index]:
+            self.buckets[index].append(key)
 
     def remove(self, key: int) -> None:
-        if key in self.hash_set:
-            self.hash_set.remove(key)
+        index = self._hash(key)
+        if key in self.buckets[index]:
+            self.buckets[index].remove(key)
 
     def contains(self, key: int) -> bool:
-        return key in self.hash_set
+        index = self._hash(key)
+        return key in self.buckets[index]
+
+    def _hash(self, key: int) -> int:
+        return key % self.size
 
 # Your MyHashSet object will be instantiated and called as such:
 # obj = MyHashSet()
