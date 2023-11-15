@@ -29,17 +29,26 @@ Constraints:
 
 Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
 """
-import math
 from typing import List
 from time import perf_counter
 
 
 def productExceptSelf(nums: List[int]) -> List[int]:
-    # res = dict(zip(range(len(nums)),[1 for _ in range(len(nums))]))
-    res = list()
-    for n in range(len(nums)):
-        res.append(math.prod(nums[0:n] + nums[n + 1:]))
+    nums_l = len(nums)
+    res = [1] * nums_l
+    prefix = 1
+    postfix = 1
+
+    for i in range(nums_l):
+        res[i] = prefix
+        prefix *= nums[i]
+
+    for i in range(nums_l-1, -1, -1):
+        res[i] *= postfix
+        postfix *= nums[i]
+
     return res
+
 
 
 if __name__ == '__main__':
