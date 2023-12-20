@@ -60,14 +60,25 @@ def removeDuplicatesAlternative(nums: List[int]) -> int:
     while n < n_len:
         if nums[n] == nums[n + 1]:
             nums.pop(n+1)
-            n_len = len(nums) - 1
+            n_len -= 1
             continue
         n += 1
     return n+1
 
 
+def removeDuplicatesAnoterAlternative(nums: List[int]) -> int:
+    n = 1
+    for i in range(1, len(nums)):
+        if nums[i] != nums[i - 1]:
+            nums[n] = nums[i]
+            n += 1
+    return n
+
+
 if __name__ == '__main__':
     print(removeDuplicates(nums=[1, 1, 2]))
     print(removeDuplicatesAlternative(nums=[1, 1, 2]))
+    print(removeDuplicatesAnoterAlternative(nums=[1, 1, 2]))
     print(removeDuplicates(nums=[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]))
     print(removeDuplicatesAlternative(nums=[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]))
+    print(removeDuplicatesAnoterAlternative(nums=[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]))
