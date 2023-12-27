@@ -40,88 +40,54 @@ Constraints:
     At most 2000 calls will be made to get, addAtHead, addAtTail, addAtIndex and deleteAtIndex.
 """
 
-class ListNode:
-    def __init__(self, val=None, next=None):
+class Node:
+    def __init__(self, val):
         self.val = val
-        self.next = next
-
-    def __str__(self):
-        return str(self.val)
-
+        self.next = None
 
 class MyLinkedList:
+
     def __init__(self):
-        self.head = ListNode()
-        self.tail = self.head
+        self.head = None
+        self.size = 0
 
     def get(self, index: int) -> int:
-        i = 0
-        current_node = self.head
-        while i < index and current_node:
-            current_node = current_node.next
-            i += 1
-        if current_node and current_node.val is not None:
-            return current_node.val
-        return -1
+        if index < 0 or index >= self.size:
+            return -1
+        cur = self.head
+        for _ in range(index):
+            cur = cur.next
+        return cur.val
 
     def addAtHead(self, val: int) -> None:
-        if self.head.val is not None:
-            self.head = ListNode(val, self.head)
-        else:
-            self.head = ListNode(val)
-            self.tail = self.head
+        self.addAtIndex(0, val)
 
     def addAtTail(self, val: int) -> None:
-        if self.tail.val is not None:
-            self.tail.next = ListNode(val)
-            self.tail = self.tail.next
-        else:
-            self.tail = ListNode(val)
-            self.head = self.tail
+        self.addAtIndex(self.size, val)
 
     def addAtIndex(self, index: int, val: int) -> None:
-        if index == 0:
-            if self.head.val is None:
-                self.head = ListNode(val)
-            else:
-                self.head = ListNode(val, self.head)
-            return None
-        i = 0
-        current_node = self.head
-        while i < index - 1 and current_node:
-            current_node = current_node.next
-            i += 1
-        if current_node:
-            current_node.next = ListNode(val, current_node.next)
-            if self.tail == current_node:
-                self.tail = current_node.next
-        if i+1 == index and current_node and not current_node.next:
-            self.tail.next = ListNode(val)
-            self.tail = self.tail.next
-        return None
+        if index > self.size: return
+        cur = self.head
+        new_node = Node(val)
+        if index <= 0:
+            new_node.next = cur
+            self.head = new_node
+        else:
+            for _ in range(index - 1):
+                cur = cur.next
+            new_node.next = cur.next
+            cur.next = new_node
+        self.size += 1
 
     def deleteAtIndex(self, index: int) -> None:
-        if index == 0:
-            self.head = self.head.next
-            return None
-        i=0
-        current_node = self.head
-        while i < index - 1 and current_node:
-            current_node = current_node.next
-            i += 1
-        if current_node and current_node.next:
-            if self.tail == current_node.next:
-                self.tail = current_node
-            current_node.next = current_node.next.next
-
-    def __str__(self):
-        curr = self.head
-        res = ''
-        while curr:
-            res += str(curr)+ ' -> '
-            curr = curr.next
-        return res
-
+        if index < 0 or index >= self.size: return
+        cur = self.head
+        if index == 0: self.head = self.head.next
+        else:
+            for _ in range(index - 1):
+                cur = cur.next
+            cur.next = cur.next.next
+        self.size -= 1
 
 # Your MyLinkedList object will be instantiated and called as such:
 if __name__ == '__main__':
