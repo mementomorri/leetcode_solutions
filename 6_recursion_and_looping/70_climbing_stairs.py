@@ -49,7 +49,7 @@ class Solution:
             else:
                 m -= 1
 
-        return self.cache[n
+        return self.cache[n]
 
     def dumb_but_fast_climbStairs(self, n: int) -> int:
         prev_prev = 1
