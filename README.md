@@ -1,2 +1,2 @@
 # code_challenges
-An archive for solutions to leetcode problems. I just like to revisit my solutions and optimize it
+An archive for solutions to leetcode problems and challenges form text books. I just like to revisit my solutions and optimize it
