@@ -1,26 +1,48 @@
 import re
 
 
+def replace_until(text, start_word, end_word, replacement):
+    start_index = text.find(start_word)
+    end_index = text.find(end_word, start_index)
+
+    if start_index != -1 and end_index != -1:
+        return text[:start_index] + replacement + text[end_index:]
+    else:
+        return text
+
+
+def replace_until_pair(text, start_word, end_word, replacement):
+    pattern = re.escape(start_word) + r'.*?' + re.escape(end_word)
+    new_text = re.sub(
+        pattern,
+        replacement,
+        text,
+    )
+
+    while new_text != text:
+        text = new_text
+        new_text = re.sub(pattern, replacement, text)
+
+    final_pattern = re.escape(start_word) + r'.*?$'
+    new_text = re.sub(final_pattern, '', text)
+
+    return new_text
+
+
 def replace_donts(line: str) -> str:
-    while "don't()" in line:
-        dont = line.find("don't()")
-        do = line.find("do()", dont)
-        if dont != -1 and do != -1:
-            line = line[:dont] + line[do + 4 :]
-            print(dont, line[dont - 6 : dont + 6], do, line[do - 4 : do + 4])
-    return line
+    return replace_until_pair(line, "don't()", "do()", "")
 
 
 def get_mulls_form_input(file_path: str) -> list[str]:
-    occurances = []
+    occurences = []
 
     with open(file_path) as file:
         lines = file.readlines()
         for line in lines:
             cleaned_line = replace_donts(line)
-            occurances.extend(re.findall(r"mul\(\d+,\d+\)", cleaned_line))
+            occurences.extend(re.findall(r"mul\(\d+,\d+\)", cleaned_line))
 
-    return occurances
+    return occurences
 
 
 def calc_mull(mull: str) -> int:
@@ -30,11 +52,11 @@ def calc_mull(mull: str) -> int:
 
 
 def sum_all_mulls(file_path: str) -> int:
-    occurances = get_mulls_form_input(file_path)
-    mulls = [calc_mull(mull) for mull in occurances]
+    occurences = get_mulls_form_input(file_path)
+    mulls = [calc_mull(mull) for mull in occurences]
     return sum(mulls)
 
 
 if __name__ == '__main__':
     res = sum_all_mulls("day3/input.txt")
-    print(res, "- sum of all of the results of just the enabled multiplications.")  # 173517243
+    print(res, "- sum of all of the results of just the enabled multiplications.")  # 102 360 389
